@@ -45,10 +45,10 @@ namespace TaskManagement.Endpoints
 
                 Expression<Func<TaskModel, object>> sortSelector = sortBy switch
                 {
-                    "name" => task => task.Name,
+                    "title" => task => task.Title,
                     "status" => task => task.Status,
                     "priority" => task => task.Priority,
-                    _ => task => task.Id
+                    _ => task => task.Name
                 };
 
                 tasksQuery = sortOrder == "ASC"
