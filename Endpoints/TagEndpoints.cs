@@ -47,6 +47,28 @@ namespace TaskManagement.Endpoints
                     }).ToList()
                 });
             }).WithName("GetTagList").WithTags("Tags").WithOpenApi();
+
+            app.MapDelete("/tags/{id}", async (Guid id, AppDbContext context) =>
+            {
+                var tag = await context.Tags.FirstOrDefaultAsync(tag => tag.Id == id);
+                if (tag == null)
+                {
+                    return Results.BadRequest(new Response<string>
+                    {
+                        StatusCode = HttpStatusCode.BadRequest,
+                        Message = $"Not found tag with id: {id}"
+                    });
+                }
+
+                context.Tags.Remove(tag);
+                await context.SaveChangesAsync();
+
+                return Results.Ok(new Response<string>
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Message = "Delete tag successfully!",
+                });
+            }).WithName("DeleteTag").WithTags("Tags").WithOpenApi();
         }
     }
 }

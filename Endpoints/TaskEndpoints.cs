@@ -35,11 +35,11 @@ namespace TaskManagement.Endpoints
                 }
 
                 var take = @params.Total <= 0 ? 5 : @params.Total;
-                var pageSkip = @params.Page <= 0 ? 0 : @params.Page;
+                var pageSkip = @params.Page <= 0 ? 1 : @params.Page;
 
                 var tasksQuery = ctx.Tasks
                                 .Include(t => t.Tags)
-                                .Skip(pageSkip * take)
+                                .Skip((pageSkip - 1) * take)
                                 .Take(take)
                                 .AsNoTracking();
 
@@ -85,6 +85,42 @@ namespace TaskManagement.Endpoints
                 });
             }).WithName("GetTaskList").WithTags("Tasks").WithOpenApi();
 
+            app.MapGet("/tasks/filter", async ([AsParameters] SearchTaskRequest query, AppDbContext ctx) =>
+            {
+                var titleLower = query.Title.ToLower();
+                var tasks = await ctx.Tasks
+                                .Include(task => task.Tags)
+                                .Where(t => t.Title.ToLower().Contains(titleLower))
+                                .ToListAsync();
+                if (tasks.Count == 0)
+                {
+                    return Results.NotFound(new Response<string>
+                    {
+                        StatusCode = HttpStatusCode.NotFound,
+                        Message = "Not found any task"
+                    });
+                }
+
+                return Results.Ok(new Response<List<TaskResponse>>
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Message = "Get tasks list by title successfully!",
+                    Data = tasks.Select(task => new TaskResponse
+                    {
+                        Id = task.Id,
+                        Title = task.Title,
+                        Name = task.Name,
+                        Status = task.Status,
+                        Priority = task.Priority,
+                        Tags = task.Tags.Select(tag => new TagView
+                        {
+                            Id = tag.Id,
+                            Name = tag.Name,
+                        }).ToList()
+                    }).ToList()
+                });
+            }).WithName("SearchTask").WithTags("Tasks").WithOpenApi();
+
             app.MapPost("/tasks/create", async (CreateTaskRequest request, AppDbContext context) =>
             {
                 if (request == null)
@@ -99,17 +135,21 @@ namespace TaskManagement.Endpoints
                 foreach (var t in request.Tags)
                 {
                     Tag tag = await context.Tags.FirstOrDefaultAsync(x => x.Id == t.Id);
-                    if (tag == default)
+                    if (tag == null)
                     {
                         var _newTag = new Tag();
-                        if (t.Id == Guid.Empty) { _newTag.Id = Guid.NewGuid(); }
-                        else { _newTag.Id = t.Id; }
-                        _newTag.Name = t.Name;
+                        if (t.Id == Guid.Empty)
+                        {
+                            t.Id = Guid.NewGuid();
+                        }
 
+                        _newTag.Id = t.Id;
+                        _newTag.Name = t.Name;
                         context.Tags.Add(_newTag);
                     }
                     else
                     {
+                        tag.Id = t.Id;
                         tag.Name = t.Name;
                         context.Tags.Update(tag);
                     }
@@ -119,7 +159,7 @@ namespace TaskManagement.Endpoints
                 var task = new TaskModel
                 {
                     Id = Guid.NewGuid(),
-                    Name = request.TaskName,
+                    Name = request.Name,
                     Title = request.Title,
                     Priority = request.Priority.ToString(),
                     Status = request.Status.ToString(),
@@ -148,7 +188,7 @@ namespace TaskManagement.Endpoints
                 });
             }).WithName("CreateTask").WithTags("Tasks").WithOpenApi();
 
-            app.MapPut("/tasks/{id}", async (Guid id, UpdateTaskRequest request, AppDbContext context) =>
+            app.MapPut("/tasks/{id}", async (Guid id, CreateTaskRequest request, AppDbContext context) =>
             {
                 if (request == null)
                 {
@@ -168,10 +208,44 @@ namespace TaskManagement.Endpoints
                         Message = $"Not found any task has id: {id}"
                     });
                 }
+
                 try
                 {
+                    foreach (var t in request.Tags)
+                    {
+                        Tag tag = await context.Tags.FirstOrDefaultAsync(x => x.Id == t.Id);
+                        if (tag == null)
+                        {
+                            var _newTag = new Tag();
+                            if (t.Id == Guid.Empty)
+                            {
+                                t.Id = Guid.NewGuid();
+                            }
+
+                            _newTag.Id = t.Id;
+                            _newTag.Name = t.Name;
+                            context.Tags.Add(_newTag);
+
+                            var _tag = new TaskTag
+                            {
+                                Id = Guid.NewGuid(),
+                                TagId = _newTag.Id,
+                                TaskId = taskExisted.Id
+                            };
+
+                            context.TaskTags.Add(_tag);
+                        }
+                        else
+                        {
+                            tag.Id = t.Id;
+                            tag.Name = t.Name;
+                            context.Tags.Update(tag);
+                        }
+                        await context.SaveChangesAsync();
+                    }
+
                     taskExisted.Title = request.Title;
-                    taskExisted.Name = request.TaskName;
+                    taskExisted.Name = request.Name;
                     taskExisted.Status = request.Status.ToString();
                     taskExisted.Priority = request.Priority.ToString();
                     context.Tasks.Update(taskExisted);
@@ -183,12 +257,12 @@ namespace TaskManagement.Endpoints
                         Message = "Update task succesfully"
                     });
                 }
-                catch
+                catch (Exception e)
                 {
                     return Results.BadRequest(new Response<string>
                     {
                         StatusCode = HttpStatusCode.BadRequest,
-                        Message = "Failed to update"
+                        Message = $"Failed to update task: {e.Message}"
                     });
                 }
             }).WithName("UpdateTask").WithTags("Tasks").WithOpenApi();
