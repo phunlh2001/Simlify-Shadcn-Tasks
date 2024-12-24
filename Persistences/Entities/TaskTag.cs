@@ -1,4 +1,4 @@
-﻿namespace TaskManagement.Data.Models
+﻿namespace TaskManagement.Persistences.Entities
 {
     public class TaskTag
     {

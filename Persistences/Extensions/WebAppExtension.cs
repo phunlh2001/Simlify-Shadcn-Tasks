@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TaskManagement.Data;
 
-namespace TaskManagement.Extensions
+namespace TaskManagement.Persistences.Extensions
 {
     public static class WebAppExtension
     {

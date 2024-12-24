@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using System.Net;
-using TaskManagement.Data;
-using TaskManagement.Data.DTOs;
-using TaskManagement.Data.Models;
+using TaskManagement.Persistences;
+using TaskManagement.Persistences.Entities;
+using TaskManagement.Presentations.DTOs.Request;
+using TaskManagement.Presentations.DTOs.Response;
 
-namespace TaskManagement.Endpoints
+namespace TaskManagement.Presentations.Endpoints
 {
     public static class TaskEndpoints
     {

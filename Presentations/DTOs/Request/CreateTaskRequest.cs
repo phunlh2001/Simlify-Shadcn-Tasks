@@ -1,6 +1,6 @@
-﻿using TaskManagement.Data.Models;
+﻿using TaskManagement.Persistences.Entities;
 
-namespace TaskManagement.Data.DTOs
+namespace TaskManagement.Presentations.DTOs.Request
 {
     public class CreateTaskRequest
     {

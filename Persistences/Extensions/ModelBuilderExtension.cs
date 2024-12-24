@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TaskManagement.Data.Models;
+using TaskManagement.Persistences.Entities;
 
-namespace TaskManagement.Extensions
+namespace TaskManagement.Persistences.Extensions
 {
     public static class ModelBuilderExtension
     {

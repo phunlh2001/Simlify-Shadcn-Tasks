@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace TaskManagement.Data.DTOs
+namespace TaskManagement.Presentations.DTOs.Response
 {
     public class Response<T> where T : class
     {

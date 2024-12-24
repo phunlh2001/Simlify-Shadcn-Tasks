@@ -1,4 +1,4 @@
-﻿namespace TaskManagement.Data.DTOs
+﻿namespace TaskManagement.Presentations.DTOs.Request
 {
     public class GetTasksRequest
     {

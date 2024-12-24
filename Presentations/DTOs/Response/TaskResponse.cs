@@ -1,4 +1,6 @@
-﻿namespace TaskManagement.Data.DTOs
+﻿using TaskManagement.Presentations.DTOs.Request;
+
+namespace TaskManagement.Presentations.DTOs.Response
 {
     public class TaskResponse
     {

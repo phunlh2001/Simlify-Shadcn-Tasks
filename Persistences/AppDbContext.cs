@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TaskManagement.Data.Models;
-using TaskManagement.Extensions;
+using TaskManagement.Persistences.Entities;
+using TaskManagement.Persistences.Extensions;
 
-namespace TaskManagement.Data
+namespace TaskManagement.Persistences
 {
     public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
     {
@@ -10,11 +10,6 @@ namespace TaskManagement.Data
         {
             base.OnModelCreating(builder);
             builder.SetUp();
-        }
-
-        internal async Task FirstOrDefault()
-        {
-            throw new NotImplementedException();
         }
 
         public DbSet<TaskModel> Tasks { get; set; }

@@ -1,6 +1,6 @@
-﻿namespace TaskManagement.Data.DTOs
+﻿namespace TaskManagement.Presentations.DTOs.Response
 {
-    public class CreateTagRequest
+    public class TagResponse
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

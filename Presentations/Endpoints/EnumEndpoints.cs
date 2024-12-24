@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
-using TaskManagement.Data;
-using TaskManagement.Data.DTOs;
+using TaskManagement.Persistences;
+using TaskManagement.Presentations.DTOs.Response;
 
-namespace TaskManagement.Endpoints
+namespace TaskManagement.Presentations.Endpoints
 {
     public static class EnumEndpoints
     {

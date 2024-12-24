@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using TaskManagement.Data;
-using TaskManagement.Endpoints;
-using TaskManagement.Extensions;
+using TaskManagement.Persistences;
+using TaskManagement.Persistences.Extensions;
+using TaskManagement.Presentations.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
