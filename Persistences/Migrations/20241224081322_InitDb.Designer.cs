@@ -9,11 +9,11 @@ using TaskManagement.Persistences;
 
 #nullable disable
 
-namespace TaskManagement.Migrations
+namespace TaskManagement.Persistences.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241220025003_ModifyTaskNameRequired")]
-    partial class ModifyTaskNameRequired
+    [Migration("20241224081322_InitDb")]
+    partial class InitDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace TaskManagement.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("TaskManagement.Data.Models.Tag", b =>
+            modelBuilder.Entity("TaskManagement.Persistences.Entities.Tag", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -41,7 +41,7 @@ namespace TaskManagement.Migrations
                     b.ToTable("Tags");
                 });
 
-            modelBuilder.Entity("TaskManagement.Data.Models.TaskModel", b =>
+            modelBuilder.Entity("TaskManagement.Persistences.Entities.TaskEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -52,12 +52,14 @@ namespace TaskManagement.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Priority")
-                        .HasMaxLength(6)
-                        .HasColumnType("nvarchar(6)");
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("Status")
-                        .HasMaxLength(12)
-                        .HasColumnType("nvarchar(12)");
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -68,7 +70,7 @@ namespace TaskManagement.Migrations
                     b.ToTable("Tasks");
                 });
 
-            modelBuilder.Entity("TaskManagement.Data.Models.TaskTag", b =>
+            modelBuilder.Entity("TaskManagement.Persistences.Entities.TaskTag", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -89,15 +91,15 @@ namespace TaskManagement.Migrations
                     b.ToTable("TaskTags");
                 });
 
-            modelBuilder.Entity("TaskManagement.Data.Models.TaskTag", b =>
+            modelBuilder.Entity("TaskManagement.Persistences.Entities.TaskTag", b =>
                 {
-                    b.HasOne("TaskManagement.Data.Models.Tag", "Tag")
+                    b.HasOne("TaskManagement.Persistences.Entities.Tag", "Tag")
                         .WithMany("TaskTags")
                         .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TaskManagement.Data.Models.TaskModel", "Task")
+                    b.HasOne("TaskManagement.Persistences.Entities.TaskEntity", "Task")
                         .WithMany("TaskTags")
                         .HasForeignKey("TaskId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -108,12 +110,12 @@ namespace TaskManagement.Migrations
                     b.Navigation("Task");
                 });
 
-            modelBuilder.Entity("TaskManagement.Data.Models.Tag", b =>
+            modelBuilder.Entity("TaskManagement.Persistences.Entities.Tag", b =>
                 {
                     b.Navigation("TaskTags");
                 });
 
-            modelBuilder.Entity("TaskManagement.Data.Models.TaskModel", b =>
+            modelBuilder.Entity("TaskManagement.Persistences.Entities.TaskEntity", b =>
                 {
                     b.Navigation("TaskTags");
                 });

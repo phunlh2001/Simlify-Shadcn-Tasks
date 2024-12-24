@@ -3,20 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TaskManagement.Persistences;
 
 #nullable disable
 
-namespace TaskManagement.Migrations
+namespace TaskManagement.Persistences.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241220022928_InitDb")]
-    partial class InitDb
+    partial class AppDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,7 +22,7 @@ namespace TaskManagement.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("TaskManagement.Data.Models.Tag", b =>
+            modelBuilder.Entity("TaskManagement.Persistences.Entities.Tag", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -41,7 +38,7 @@ namespace TaskManagement.Migrations
                     b.ToTable("Tags");
                 });
 
-            modelBuilder.Entity("TaskManagement.Data.Models.TaskModel", b =>
+            modelBuilder.Entity("TaskManagement.Persistences.Entities.TaskEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -52,14 +49,17 @@ namespace TaskManagement.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Priority")
-                        .HasMaxLength(6)
-                        .HasColumnType("nvarchar(6)");
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("Status")
-                        .HasMaxLength(12)
-                        .HasColumnType("nvarchar(12)");
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -67,7 +67,7 @@ namespace TaskManagement.Migrations
                     b.ToTable("Tasks");
                 });
 
-            modelBuilder.Entity("TaskManagement.Data.Models.TaskTag", b =>
+            modelBuilder.Entity("TaskManagement.Persistences.Entities.TaskTag", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -88,15 +88,15 @@ namespace TaskManagement.Migrations
                     b.ToTable("TaskTags");
                 });
 
-            modelBuilder.Entity("TaskManagement.Data.Models.TaskTag", b =>
+            modelBuilder.Entity("TaskManagement.Persistences.Entities.TaskTag", b =>
                 {
-                    b.HasOne("TaskManagement.Data.Models.Tag", "Tag")
+                    b.HasOne("TaskManagement.Persistences.Entities.Tag", "Tag")
                         .WithMany("TaskTags")
                         .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TaskManagement.Data.Models.TaskModel", "Task")
+                    b.HasOne("TaskManagement.Persistences.Entities.TaskEntity", "Task")
                         .WithMany("TaskTags")
                         .HasForeignKey("TaskId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -107,12 +107,12 @@ namespace TaskManagement.Migrations
                     b.Navigation("Task");
                 });
 
-            modelBuilder.Entity("TaskManagement.Data.Models.Tag", b =>
+            modelBuilder.Entity("TaskManagement.Persistences.Entities.Tag", b =>
                 {
                     b.Navigation("TaskTags");
                 });
 
-            modelBuilder.Entity("TaskManagement.Data.Models.TaskModel", b =>
+            modelBuilder.Entity("TaskManagement.Persistences.Entities.TaskEntity", b =>
                 {
                     b.Navigation("TaskTags");
                 });

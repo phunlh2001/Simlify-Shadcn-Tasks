@@ -1,4 +1,4 @@
-﻿namespace TaskManagement.Presentations.DTOs.Request
+﻿namespace TaskManagement.Presentations.Request
 {
     public class SearchTaskRequest
     {

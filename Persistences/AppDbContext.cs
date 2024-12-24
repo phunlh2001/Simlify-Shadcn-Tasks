@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TaskManagement.Persistences.Entities;
-using TaskManagement.Persistences.Extensions;
 
 namespace TaskManagement.Persistences
 {
@@ -9,10 +8,25 @@ namespace TaskManagement.Persistences
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.SetUp();
+            builder.Entity<TaskEntity>(b =>
+            {
+                b.Property(x => x.Title).IsRequired();
+                b.Property(x => x.Name).IsRequired();
+                b.Property(x => x.Status).HasMaxLength(30).HasConversion<string>();
+                b.Property(x => x.Priority).HasMaxLength(30).HasConversion<string>();
+
+                b.HasMany(x => x.Tags)
+                    .WithMany(b => b.Tasks)
+                    .UsingEntity<TaskTag>();
+            });
+
+            builder.Entity<Tag>(b =>
+            {
+                b.Property(x => x.Name).HasMaxLength(15).IsRequired();
+            });
         }
 
-        public DbSet<TaskModel> Tasks { get; set; }
+        public DbSet<TaskEntity> Tasks { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<TaskTag> TaskTags { get; set; }
     }

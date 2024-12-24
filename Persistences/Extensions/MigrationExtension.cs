@@ -2,7 +2,7 @@
 
 namespace TaskManagement.Persistences.Extensions
 {
-    public static class WebAppExtension
+    public static class MigrationExtension
     {
         public static async Task Init(this WebApplication app)
         {

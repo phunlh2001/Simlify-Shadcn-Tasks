@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace TaskManagement.Migrations
+namespace TaskManagement.Persistences.Migrations
 {
     /// <inheritdoc />
     public partial class InitDb : Migration
@@ -29,9 +29,9 @@ namespace TaskManagement.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Status = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: true),
-                    Priority = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: true)
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Priority = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false)
                 },
                 constraints: table =>
                 {
