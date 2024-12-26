@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace TaskManagement.Presentations.Response
+namespace TaskManagement.Features.Models
 {
     public class BaseResponse<T> where T : class
     {

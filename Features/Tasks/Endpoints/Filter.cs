@@ -1,16 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
+using TaskManagement.Features.Models;
+using TaskManagement.Features.Tasks.Requests;
+using TaskManagement.Features.Tasks.Responses;
 using TaskManagement.Persistences;
-using TaskManagement.Presentations.Request;
-using TaskManagement.Presentations.Response;
 
-namespace TaskManagement.Presentations.Endpoints.Tasks
+namespace TaskManagement.Features.Tasks.Endpoints
 {
     public static class Filter
     {
         public static void MapFilterTasks(this WebApplication app)
         {
-            app.MapGet("/tasks/filter", async ([AsParameters] SearchTaskRequest query, AppDbContext ctx) =>
+            app.MapGet("/tasks/filter", async ([AsParameters] SearchTaskRequest query, AppDbContext ctx, IMapper mapper) =>
             {
                 var titleLower = query.Title.ToLower();
                 var tasks = await ctx.Tasks
@@ -26,7 +28,7 @@ namespace TaskManagement.Presentations.Endpoints.Tasks
                     });
                 }
 
-                return Results.Ok(TaskResponse.MapListFrom(tasks));
+                return Results.Ok(mapper.Map<List<TaskResponse>>(tasks));
             }).WithName("SearchTask").WithTags("Tasks").WithOpenApi();
         }
     }

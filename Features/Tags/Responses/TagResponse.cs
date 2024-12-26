@@ -1,6 +1,6 @@
-﻿namespace TaskManagement.Presentations.Request
+﻿namespace TaskManagement.Features.Tags.Responses
 {
-    public class CreateTagRequest
+    public class TagResponse
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

@@ -1,15 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
+using TaskManagement.Features.Models;
+using TaskManagement.Features.Tags.Responses;
 using TaskManagement.Persistences;
-using TaskManagement.Presentations.Response;
 
-namespace TaskManagement.Presentations.Endpoints.Tags
+namespace TaskManagement.Features.Tags.Endpoints
 {
     public static class GetDetail
     {
         public static void MapGetTagDetail(this WebApplication app)
         {
-            app.MapGet("/tags/{id}", async (Guid id, AppDbContext context) =>
+            app.MapGet("/tags/{id}", async (Guid id, AppDbContext context, IMapper mapper) =>
             {
                 var tag = await context.Tags.FirstOrDefaultAsync(tag => tag.Id == id);
                 if (tag == null)
@@ -21,13 +23,7 @@ namespace TaskManagement.Presentations.Endpoints.Tags
                     });
                 }
 
-                var response = new TagResponse
-                {
-                    Id = id,
-                    Name = tag.Name,
-                };
-
-                return Results.Ok(response);
+                return Results.Ok(mapper.Map<TagResponse>(tag));
             }).WithName("GetTagById").WithTags("Tags").WithOpenApi();
         }
     }

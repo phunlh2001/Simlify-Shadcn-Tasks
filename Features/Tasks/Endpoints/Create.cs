@@ -1,10 +1,11 @@
 ﻿using System.Net;
+using TaskManagement.Features.Models;
+using TaskManagement.Features.Tasks.Requests;
+using TaskManagement.Features.Tasks.Validations;
 using TaskManagement.Persistences;
 using TaskManagement.Persistences.Entities;
-using TaskManagement.Presentations.Request;
-using TaskManagement.Presentations.Response;
 
-namespace TaskManagement.Presentations.Endpoints.Tasks
+namespace TaskManagement.Features.Tasks.Endpoints
 {
     public static class Create
     {
@@ -21,29 +22,37 @@ namespace TaskManagement.Presentations.Endpoints.Tasks
                     });
                 }
 
+                var validator = new CreateTaskValidator();
+                var validationResult = validator.Validate(request);
+                if (!validationResult.IsValid)
+                {
+                    return Results.BadRequest(new BaseResponse<List<string>>
+                    {
+                        StatusCode = HttpStatusCode.BadRequest,
+                        Message = "Validation failed!",
+                        Data = validationResult.Errors.Select(error => error.ErrorMessage).ToList()
+                    });
+                }
+
                 List<Tag> tags = [];
                 foreach (var tag in request.Tags)
                 {
+                    var tagEntity = new Tag
+                    {
+                        Id = tag.Id ?? Guid.NewGuid(),
+                        Name = tag.Name,
+                    };
+
                     if (!tag.Id.HasValue)
                     {
-                        var newTag = new Tag
-                        {
-                            Id = Guid.NewGuid(),
-                            Name = tag.Name,
-                        };
-                        context.Tags.Add(newTag);
-                        tags.Add(newTag);
+                        context.Tags.Add(tagEntity);
                     }
                     else
                     {
-                        var modifiedTag = new Tag
-                        {
-                            Id = tag.Id.Value,
-                            Name = tag.Name,
-                        };
-                        context.Tags.Update(modifiedTag);
-                        tags.Add(modifiedTag);
+                        context.Tags.Update(tagEntity);
                     }
+
+                    tags.Add(tagEntity);
                     await context.SaveChangesAsync();
                 }
 

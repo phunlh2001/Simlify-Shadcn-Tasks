@@ -1,21 +1,21 @@
 ﻿using AutoMapper;
+using TaskManagement.Features.Models;
+using TaskManagement.Features.Tags.Responses;
+using TaskManagement.Features.Tasks.Responses;
 using TaskManagement.Persistences.Entities;
-using TaskManagement.Presentations.Response;
 
 namespace TaskManagement.Configuration
 {
-    public class MapperConfig
+    public class MapperConfig : Profile
     {
-        public static Mapper InititalizeAutomapper()
+        public MapperConfig()
         {
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<TaskEntity, TaskResponse>().ReverseMap();
-                cfg.CreateMap<Tag, TagResponse>().ReverseMap();
-            });
+            CreateMap<TaskEntity, TaskResponse>()
+                .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Tags))
+                .ReverseMap();
 
-            var mapper = new Mapper(config);
-            return mapper;
+            CreateMap<Tag, TagResponse>().ReverseMap();
+            CreateMap<Tag, TagModel>();
         }
     }
 }

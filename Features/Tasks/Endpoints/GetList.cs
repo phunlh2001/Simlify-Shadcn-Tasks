@@ -1,18 +1,20 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using System.Net;
+using TaskManagement.Features.Models;
+using TaskManagement.Features.Tasks.Requests;
+using TaskManagement.Features.Tasks.Responses;
 using TaskManagement.Persistences;
 using TaskManagement.Persistences.Entities;
-using TaskManagement.Presentations.Request;
-using TaskManagement.Presentations.Response;
 
-namespace TaskManagement.Presentations.Endpoints.Tasks
+namespace TaskManagement.Features.Tasks.Endpoints
 {
     public static class GetList
     {
         public static void MapGetTaskList(this WebApplication app)
         {
-            app.MapGet("/tasks", async ([AsParameters] GetTasksRequest @params, AppDbContext ctx) =>
+            app.MapGet("/tasks", async ([AsParameters] GetTasksRequest @params, AppDbContext ctx, IMapper mapper) =>
             {
                 var sortBy = @params.SortBy.ToLower();
                 var sortOrder = @params.SortOrder.ToUpper();
@@ -66,7 +68,7 @@ namespace TaskManagement.Presentations.Endpoints.Tasks
                     });
                 }
 
-                return Results.Ok(TaskResponse.MapListFrom(tasks));
+                return Results.Ok(mapper.Map<List<TaskResponse>>(tasks));
 
             }).WithName("GetTaskList").WithTags("Tasks").WithOpenApi();
         }

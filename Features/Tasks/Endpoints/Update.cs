@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Net;
+using TaskManagement.Features.Models;
+using TaskManagement.Features.Tasks.Requests;
+using TaskManagement.Features.Tasks.Validations;
 using TaskManagement.Persistences;
 using TaskManagement.Persistences.Entities;
-using TaskManagement.Presentations.Request;
-using TaskManagement.Presentations.Response;
 
-namespace TaskManagement.Presentations.Endpoints.Tasks
+namespace TaskManagement.Features.Tasks.Endpoints
 {
     public static class Update
     {
@@ -19,6 +20,17 @@ namespace TaskManagement.Presentations.Endpoints.Tasks
                     {
                         StatusCode = HttpStatusCode.BadRequest,
                         Message = "Request body is required!"
+                    });
+                }
+
+                var validatorResult = new UpdateTaskValidator().Validate(request);
+                if (!validatorResult.IsValid)
+                {
+                    return Results.BadRequest(new BaseResponse<List<string>>
+                    {
+                        StatusCode = HttpStatusCode.BadRequest,
+                        Message = "Validation failed!",
+                        Data = validatorResult.Errors.Select(error => error.ErrorMessage).ToList()
                     });
                 }
 
@@ -36,23 +48,19 @@ namespace TaskManagement.Presentations.Endpoints.Tasks
                 {
                     foreach (var tag in request.Tags)
                     {
+                        var tagEntity = new Tag
+                        {
+                            Id = tag.Id ?? Guid.NewGuid(),
+                            Name = tag.Name,
+                        };
+
                         if (!tag.Id.HasValue)
                         {
-                            var newTag = new Tag
-                            {
-                                Id = Guid.NewGuid(),
-                                Name = tag.Name,
-                            };
-                            context.Tags.Add(newTag);
+                            context.Tags.Add(tagEntity);
                         }
                         else
                         {
-                            var modifiedTag = new Tag
-                            {
-                                Id = tag.Id.Value,
-                                Name = tag.Name,
-                            };
-                            context.Tags.Update(modifiedTag);
+                            context.Tags.Update(tagEntity);
                         }
                         await context.SaveChangesAsync();
                     }

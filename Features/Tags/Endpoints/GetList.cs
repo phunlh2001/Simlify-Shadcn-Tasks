@@ -1,16 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
+using TaskManagement.Features.Models;
+using TaskManagement.Features.Tags.Requests;
+using TaskManagement.Features.Tags.Responses;
 using TaskManagement.Persistences;
-using TaskManagement.Presentations.Request;
-using TaskManagement.Presentations.Response;
 
-namespace TaskManagement.Presentations.Endpoints.Tags
+namespace TaskManagement.Features.Tags.Endpoints
 {
     public static class GetList
     {
         public static void MapGetTagList(this WebApplication app)
         {
-            app.MapPost("/tags", async (GetTagsRequest request, AppDbContext context) =>
+            app.MapPost("/tags", async (GetTagsRequest request, AppDbContext context, IMapper mapper) =>
             {
                 if (request == null)
                 {
@@ -36,7 +38,7 @@ namespace TaskManagement.Presentations.Endpoints.Tags
                         Message = "Empty list!"
                     });
                 }
-                return Results.Ok(TagResponse.MapListFrom(tags));
+                return Results.Ok(mapper.Map<List<TagResponse>>(tags));
 
             }).WithName("GetTagList").WithTags("Tags").WithOpenApi();
         }

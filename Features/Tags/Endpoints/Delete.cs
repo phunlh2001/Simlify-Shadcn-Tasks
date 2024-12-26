@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Net;
+using TaskManagement.Features.Models;
 using TaskManagement.Persistences;
-using TaskManagement.Presentations.Response;
 
-namespace TaskManagement.Presentations.Endpoints.Tags
+namespace TaskManagement.Features.Tags.Endpoints
 {
     public static class Delete
     {

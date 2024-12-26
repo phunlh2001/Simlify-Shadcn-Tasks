@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
+using TaskManagement.Features.Tags.Endpoints;
+using TaskManagement.Features.Tasks.Endpoints;
 using TaskManagement.Persistences;
 using TaskManagement.Persistences.Extensions;
-using TaskManagement.Presentations.Endpoints.Tags;
-using TaskManagement.Presentations.Endpoints.Tasks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +22,7 @@ builder.Services.ConfigureHttpJsonOptions(option =>
     option.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
 
-//builder.Services.AddAutoMapper(MapperConfig.InititalizeAutomapper());
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
 

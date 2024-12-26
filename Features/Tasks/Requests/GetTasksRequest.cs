@@ -1,4 +1,4 @@
-﻿namespace TaskManagement.Presentations.Request
+﻿namespace TaskManagement.Features.Tasks.Requests
 {
     public class GetTasksRequest
     {
