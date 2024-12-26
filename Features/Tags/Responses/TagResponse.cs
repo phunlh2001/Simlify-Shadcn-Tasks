@@ -1,8 +1,6 @@
-﻿namespace TaskManagement.Features.Tags.Responses
+﻿using TaskManagement.Features.Common.Models;
+
+namespace TaskManagement.Features.Tags.Responses
 {
-    public class TagResponse
-    {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-    }
+    public class TagResponse : TagPreload;
 }

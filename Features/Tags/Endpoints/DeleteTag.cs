@@ -5,7 +5,7 @@ using TaskManagement.Persistences;
 
 namespace TaskManagement.Features.Tags.Endpoints
 {
-    public static class Delete
+    public static class DeleteTag
     {
         public static void MapDeleteTag(this WebApplication app)
         {
@@ -37,7 +37,7 @@ namespace TaskManagement.Features.Tags.Endpoints
                     return Results.BadRequest(new BaseResponse<string>
                     {
                         StatusCode = HttpStatusCode.BadRequest,
-                        Message = $"Failed to delete task: {ex.Message}",
+                        Message = $"Failed to delete: {ex.Message}",
                     });
                 }
             }).WithName("DeleteTag").WithTags("Tags").WithOpenApi();

@@ -7,12 +7,21 @@ using TaskManagement.Persistences.Entities;
 
 namespace TaskManagement.Features.Tasks.Endpoints
 {
-    public static class Create
+    public static class CreateTask
     {
         public static void MapCreateTask(this WebApplication app)
         {
             app.MapPost("/tasks/create", async (CreateTaskRequest request, AppDbContext context) =>
             {
+                if (request == null)
+                {
+                    return Results.BadRequest(new BaseResponse<string>
+                    {
+                        StatusCode = HttpStatusCode.BadRequest,
+                        Message = "Request body is required!"
+                    });
+                }
+
                 var validationResult = new CreateTaskValidator().Validate(request);
                 if (!validationResult.IsValid)
                 {

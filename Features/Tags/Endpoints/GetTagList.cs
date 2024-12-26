@@ -9,7 +9,7 @@ using TaskManagement.Persistences;
 
 namespace TaskManagement.Features.Tags.Endpoints
 {
-    public static class GetList
+    public static class GetTagList
     {
         public static void MapGetTagList(this WebApplication app)
         {
@@ -36,7 +36,7 @@ namespace TaskManagement.Features.Tags.Endpoints
                 }
 
                 var take = Math.Max(request.Total, 5);
-                var skip = Math.Max(request.Skip - 1, 0) * take;
+                var skip = Math.Max(request.Page - 1, 0) * take;
 
                 var tags = await context.Tags
                                 .AsNoTracking()

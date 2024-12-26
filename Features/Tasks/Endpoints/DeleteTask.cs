@@ -5,7 +5,7 @@ using TaskManagement.Persistences;
 
 namespace TaskManagement.Features.Tasks.Endpoints
 {
-    public static class Delete
+    public static class DeleteTask
     {
         public static void MapDeleteTask(this WebApplication app)
         {

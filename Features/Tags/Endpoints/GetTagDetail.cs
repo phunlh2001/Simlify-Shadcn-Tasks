@@ -7,7 +7,7 @@ using TaskManagement.Persistences;
 
 namespace TaskManagement.Features.Tags.Endpoints
 {
-    public static class GetDetail
+    public static class GetTagDetail
     {
         public static void MapGetTagDetail(this WebApplication app)
         {

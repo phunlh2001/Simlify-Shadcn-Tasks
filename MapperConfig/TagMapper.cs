@@ -11,7 +11,7 @@ namespace TaskManagement.MapperConfig
         {
             CreateMap<Tag, TagResponse>().ReverseMap();
 
-            CreateMap<Tag, TagModel>();
+            CreateMap<Tag, TagPreload>();
         }
     }
 }

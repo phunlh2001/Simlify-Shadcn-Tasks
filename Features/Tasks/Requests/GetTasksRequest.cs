@@ -1,6 +1,8 @@
-﻿namespace TaskManagement.Features.Tasks.Requests
+﻿using TaskManagement.Features.Common.Interfaces;
+
+namespace TaskManagement.Features.Tasks.Requests
 {
-    public class GetTasksRequest
+    public class GetTasksRequest : IPaginationRequest
     {
         public int Total { get; set; }
         public int Page { get; set; }

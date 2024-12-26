@@ -7,7 +7,7 @@ using TaskManagement.Persistences;
 
 namespace TaskManagement.Features.Tasks.Endpoints
 {
-    public static class GetDetail
+    public static class GetTaskDetail
     {
         public static void MapGetTaskDetail(this WebApplication app)
         {

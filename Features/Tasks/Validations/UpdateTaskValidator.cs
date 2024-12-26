@@ -7,8 +7,6 @@ namespace TaskManagement.Features.Tasks.Validations
     {
         public UpdateTaskValidator()
         {
-            //RuleForEach();
-
             RuleFor(task => task.Name)
                 .NotNull().WithMessage("Name is required.")
                 .NotEmpty().WithMessage("Name cannot be empty.")
@@ -23,9 +21,6 @@ namespace TaskManagement.Features.Tasks.Validations
 
             RuleFor(task => task.Priority)
                 .IsInEnum().WithMessage("Invalid priority.");
-
-            RuleFor(task => task.Tags)
-                .NotNull().WithMessage("Tags cannot be null.");
 
             RuleForEach(task => task.Tags)
                 .ChildRules(tag =>

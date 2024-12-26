@@ -1,8 +1,10 @@
-﻿namespace TaskManagement.Features.Tags.Requests
+﻿using TaskManagement.Features.Common.Interfaces;
+
+namespace TaskManagement.Features.Tags.Requests
 {
-    public class GetTagsRequest
+    public class GetTagsRequest : IPaginationRequest
     {
         public int Total { get; set; }
-        public int Skip { get; set; }
+        public int Page { get; set; }
     }
 }

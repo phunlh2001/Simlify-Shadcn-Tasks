@@ -9,7 +9,7 @@ using TaskManagement.Persistences.Entities;
 
 namespace TaskManagement.Features.Tasks.Endpoints
 {
-    public static class Update
+    public static class UpdateTask
     {
         public static void MapUpdateTask(this WebApplication app)
         {

@@ -12,7 +12,7 @@ using TaskManagement.Persistences.Entities;
 
 namespace TaskManagement.Features.Tasks.Endpoints
 {
-    public static class GetList
+    public static class GetTaskList
     {
         public static void MapGetTaskList(this WebApplication app)
         {

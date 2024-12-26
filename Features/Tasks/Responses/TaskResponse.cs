@@ -10,6 +10,6 @@ namespace TaskManagement.Features.Tasks.Responses
         public string Title { get; set; }
         public TaskEntityStatus Status { get; set; }
         public TaskPriority Priority { get; set; }
-        public List<TagModel> Tags { get; set; }
+        public List<TagPreload> Tags { get; set; }
     }
 }

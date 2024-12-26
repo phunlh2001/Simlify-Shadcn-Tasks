@@ -1,6 +1,6 @@
 ﻿namespace TaskManagement.Features.Common.Models
 {
-    public class TagModel
+    public class TagPreload
     {
         public Guid? Id { get; set; }
         public string Name { get; set; }

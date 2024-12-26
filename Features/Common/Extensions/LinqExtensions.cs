@@ -9,9 +9,8 @@ namespace TaskManagement.Features.Common.Extensions
             return condition ? query.Where(predicate) : query;
         }
 
-        public static IQueryable<T> OrderByDirection<T>(this IQueryable<T> query, Expression<Func<T, object>> orderSelector, string sortOrder)
+        public static IQueryable<T> OrderByDirection<T>(this IQueryable<T> query, Expression<Func<T, object>> orderSelector, string sortOrder = "ASC")
         {
-            if (string.IsNullOrEmpty(sortOrder)) { sortOrder = "ASC"; }
             return sortOrder.ToUpper() == "ASC"
                 ? query.OrderBy(orderSelector)
                 : query.OrderByDescending(orderSelector);

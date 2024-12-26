@@ -9,7 +9,7 @@ namespace TaskManagement.Features.Tags.Validations
         {
             RuleFor(x => x.Total).NotNull().NotEmpty().WithMessage("Missing 'total' field");
 
-            RuleFor(x => x.Skip).NotNull().NotEmpty().WithMessage("Missing 'skip' field");
+            RuleFor(x => x.Page).NotNull().NotEmpty().WithMessage("Missing 'skip' field");
         }
     }
 }

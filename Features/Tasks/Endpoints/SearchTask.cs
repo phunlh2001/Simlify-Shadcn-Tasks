@@ -8,16 +8,17 @@ using TaskManagement.Persistences;
 
 namespace TaskManagement.Features.Tasks.Endpoints
 {
-    public static class Filter
+    public static class SearchTask
     {
         public static void MapFilterTasks(this WebApplication app)
         {
-            app.MapGet("/tasks/filter", async ([AsParameters] SearchTaskRequest query, AppDbContext ctx, IMapper mapper) =>
+            app.MapGet("/tasks", async ([AsParameters] SearchTaskRequest query, AppDbContext ctx, IMapper mapper) =>
             {
                 var tasks = await ctx.Tasks
                                 .Include(task => task.Tags)
                                 .Where(t => t.Title.ToLower().Contains(query.Title.ToLower()))
                                 .ToListAsync();
+
                 if (tasks.Count == 0)
                 {
                     return Results.NotFound(new BaseResponse<string>
