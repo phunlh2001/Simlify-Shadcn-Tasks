@@ -1,5 +1,5 @@
 ﻿using System.Net;
-using TaskManagement.Features.Models;
+using TaskManagement.Features.Common.Models;
 using TaskManagement.Features.Tasks.Requests;
 using TaskManagement.Features.Tasks.Validations;
 using TaskManagement.Persistences;
@@ -13,15 +13,6 @@ namespace TaskManagement.Features.Tasks.Endpoints
         {
             app.MapPost("/tasks/create", async (CreateTaskRequest request, AppDbContext context) =>
             {
-                if (request == null)
-                {
-                    return Results.BadRequest(new BaseResponse<string>
-                    {
-                        StatusCode = HttpStatusCode.BadRequest,
-                        Message = "Request body is required!"
-                    });
-                }
-
                 var validator = new CreateTaskValidator();
                 var validationResult = validator.Validate(request);
                 if (!validationResult.IsValid)
@@ -30,7 +21,7 @@ namespace TaskManagement.Features.Tasks.Endpoints
                     {
                         StatusCode = HttpStatusCode.BadRequest,
                         Message = "Validation failed!",
-                        Data = validationResult.Errors.Select(error => error.ErrorMessage).ToList()
+                        Info = validationResult.Errors.Select(error => error.ErrorMessage).ToList()
                     });
                 }
 

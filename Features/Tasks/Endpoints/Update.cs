@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
-using TaskManagement.Features.Models;
+using TaskManagement.Features.Common.Models;
 using TaskManagement.Features.Tasks.Requests;
+using TaskManagement.Features.Tasks.Responses;
 using TaskManagement.Features.Tasks.Validations;
 using TaskManagement.Persistences;
 using TaskManagement.Persistences.Entities;
@@ -12,17 +14,8 @@ namespace TaskManagement.Features.Tasks.Endpoints
     {
         public static void MapUpdateTask(this WebApplication app)
         {
-            app.MapPut("/tasks/{id}", async (Guid id, UpdateTaskRequest request, AppDbContext context) =>
+            app.MapPut("/tasks/{id}", async (Guid id, UpdateTaskRequest request, AppDbContext context, IMapper mapper) =>
             {
-                if (request == null)
-                {
-                    return Results.BadRequest(new BaseResponse<string>
-                    {
-                        StatusCode = HttpStatusCode.BadRequest,
-                        Message = "Request body is required!"
-                    });
-                }
-
                 var validatorResult = new UpdateTaskValidator().Validate(request);
                 if (!validatorResult.IsValid)
                 {
@@ -30,11 +23,11 @@ namespace TaskManagement.Features.Tasks.Endpoints
                     {
                         StatusCode = HttpStatusCode.BadRequest,
                         Message = "Validation failed!",
-                        Data = validatorResult.Errors.Select(error => error.ErrorMessage).ToList()
+                        Info = validatorResult.Errors.Select(error => error.ErrorMessage).ToList()
                     });
                 }
 
-                var taskExisted = await context.Tasks.FirstOrDefaultAsync(t => t.Id == id);
+                var taskExisted = await context.Tasks.Include(t => t.Tags).FirstOrDefaultAsync(t => t.Id == id);
                 if (taskExisted == null)
                 {
                     return Results.NotFound(new BaseResponse<string>
@@ -46,11 +39,11 @@ namespace TaskManagement.Features.Tasks.Endpoints
 
                 try
                 {
+                    List<Tag> tags = [];
                     foreach (var tag in request.Tags)
                     {
                         var tagEntity = new Tag
                         {
-                            Id = tag.Id ?? Guid.NewGuid(),
                             Name = tag.Name,
                         };
 
@@ -60,22 +53,22 @@ namespace TaskManagement.Features.Tasks.Endpoints
                         }
                         else
                         {
+                            tagEntity.Id = tag.Id.Value;
                             context.Tags.Update(tagEntity);
                         }
-                        await context.SaveChangesAsync();
+                        tags.Add(tagEntity);
                     }
 
-                    taskExisted.Title = request.Title;
-                    taskExisted.Name = request.Name;
-                    taskExisted.Status = request.Status;
-                    taskExisted.Priority = request.Priority;
-                    context.Tasks.Update(taskExisted);
+                    taskExisted.TaskTags = tags.Select(t => new TaskTag { TaskId = id, TagId = t.Id }).ToList();
+                    var taskModified = mapper.Map(request, taskExisted);
+                    context.Tasks.Update(taskModified);
                     await context.SaveChangesAsync();
 
-                    return Results.Ok(new BaseResponse<string>
+                    return Results.Ok(new BaseResponse<TaskResponse>
                     {
                         StatusCode = HttpStatusCode.OK,
-                        Message = "Update task succesfully"
+                        Message = "Update task succesfully",
+                        Info = mapper.Map<TaskResponse>(request)
                     });
                 }
                 catch (Exception e)

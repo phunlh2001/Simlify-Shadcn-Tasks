@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
-using TaskManagement.Features.Models;
+using TaskManagement.Features.Common.Models;
 using TaskManagement.Features.Tags.Requests;
 using TaskManagement.Features.Tags.Responses;
 using TaskManagement.Persistences;
@@ -23,7 +23,7 @@ namespace TaskManagement.Features.Tags.Endpoints
                     });
                 }
 
-                var take = request.Total <= 0 ? 5 : request.Total;
+                var take = Math.Max(request.Total, 5);
                 var tags = await context.Tags
                                 .AsNoTracking()
                                 .Skip(request.Skip)

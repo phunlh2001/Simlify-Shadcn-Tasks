@@ -1,4 +1,4 @@
-﻿namespace TaskManagement.Features.Models
+﻿namespace TaskManagement.Features.Common.Models
 {
     public class TagModel
     {

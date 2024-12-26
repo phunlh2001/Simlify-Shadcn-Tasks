@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
-using TaskManagement.Features.Models;
+using TaskManagement.Features.Common.Models;
 using TaskManagement.Features.Tags.Responses;
 using TaskManagement.Persistences;
 

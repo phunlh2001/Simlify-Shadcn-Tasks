@@ -1,4 +1,4 @@
-﻿using TaskManagement.Features.Models;
+﻿using TaskManagement.Features.Common.Models;
 using TaskManagement.Persistences.Enums;
 
 namespace TaskManagement.Features.Tasks.Requests

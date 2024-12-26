@@ -2,9 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using System.Net;
-using TaskManagement.Features.Models;
+using TaskManagement.Features.Common.Extensions;
+using TaskManagement.Features.Common.Models;
 using TaskManagement.Features.Tasks.Requests;
 using TaskManagement.Features.Tasks.Responses;
+using TaskManagement.Features.Tasks.Validations;
 using TaskManagement.Persistences;
 using TaskManagement.Persistences.Entities;
 
@@ -16,37 +18,21 @@ namespace TaskManagement.Features.Tasks.Endpoints
         {
             app.MapGet("/tasks", async ([AsParameters] GetTasksRequest @params, AppDbContext ctx, IMapper mapper) =>
             {
-                var sortBy = @params.SortBy.ToLower();
-                var sortOrder = @params.SortOrder.ToUpper();
-
-                if (sortOrder != "ASC" && sortOrder != "DESC")
+                var validationResults = new GetTaskValidator().Validate(@params);
+                if (!validationResults.IsValid)
                 {
-                    return Results.BadRequest(new BaseResponse<string>
+                    return Results.BadRequest(new BaseResponse<List<string>>
                     {
                         StatusCode = HttpStatusCode.BadRequest,
-                        Message = "SortOrder only accept ASC or DESC value!"
+                        Message = "Invalid request!",
+                        Info = validationResults.Errors.Select(error => error.ErrorMessage).ToList()
                     });
                 }
 
-                if (string.IsNullOrEmpty(sortBy))
-                {
-                    return Results.BadRequest(new BaseResponse<string>
-                    {
-                        StatusCode = HttpStatusCode.BadRequest,
-                        Message = "SortBy cannot be null or empty!"
-                    });
-                }
+                var take = Math.Max(@params.Total, 5);
+                var page = Math.Max(@params.Page - 1, 0) * take;
 
-                var take = @params.Total <= 0 ? 5 : @params.Total;
-                var pageSkip = @params.Page <= 0 ? 1 : @params.Page;
-
-                var tasksQuery = ctx.Tasks
-                                .Include(t => t.Tags)
-                                .Skip((pageSkip - 1) * take)
-                                .Take(take)
-                                .AsNoTracking();
-
-                Expression<Func<TaskEntity, object>> sortSelector = sortBy switch
+                Expression<Func<TaskEntity, object>> sortSelector = @params.SortBy.ToLower() switch
                 {
                     "title" => task => task.Title,
                     "status" => task => task.Status,
@@ -54,11 +40,14 @@ namespace TaskManagement.Features.Tasks.Endpoints
                     _ => task => task.Name
                 };
 
-                tasksQuery = sortOrder == "ASC"
-                    ? tasksQuery.OrderBy(sortSelector)
-                    : tasksQuery.OrderByDescending(sortSelector);
+                var tasks = await ctx.Tasks
+                                .AsNoTracking()
+                                .Include(t => t.Tags)
+                                .Skip(page)
+                                .Take(take)
+                                .OrderByDirection(sortSelector, @params.SortOrder)
+                                .ToListAsync();
 
-                var tasks = await tasksQuery.ToListAsync();
                 if (tasks.Count == 0)
                 {
                     return Results.NotFound(new BaseResponse<string>

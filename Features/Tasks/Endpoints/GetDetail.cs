@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
-using TaskManagement.Features.Models;
+using TaskManagement.Features.Common.Models;
 using TaskManagement.Features.Tasks.Responses;
 using TaskManagement.Persistences;
 
@@ -13,7 +13,7 @@ namespace TaskManagement.Features.Tasks.Endpoints
         {
             app.MapGet("/tasks/{id}", async (Guid id, AppDbContext context, IMapper mapper) =>
             {
-                var task = await context.Tasks.FirstOrDefaultAsync(t => t.Id == id);
+                var task = await context.Tasks.Include(task => task.Tags).FirstOrDefaultAsync(t => t.Id == id);
                 if (task == null)
                 {
                     return Results.NotFound(new BaseResponse<string>
