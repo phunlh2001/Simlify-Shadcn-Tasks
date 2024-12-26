@@ -7,6 +7,8 @@ namespace TaskManagement.Features.Tasks.Validations
     {
         public UpdateTaskValidator()
         {
+            //RuleForEach();
+
             RuleFor(task => task.Name)
                 .NotNull().WithMessage("Name is required.")
                 .NotEmpty().WithMessage("Name cannot be empty.")

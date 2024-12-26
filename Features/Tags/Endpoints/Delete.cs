@@ -21,14 +21,25 @@ namespace TaskManagement.Features.Tags.Endpoints
                     });
                 }
 
-                context.Tags.Remove(tag);
-                await context.SaveChangesAsync();
-
-                return Results.Ok(new BaseResponse<string>
+                try
                 {
-                    StatusCode = HttpStatusCode.OK,
-                    Message = "Delete tag successfully!",
-                });
+                    context.Tags.Remove(tag);
+                    await context.SaveChangesAsync();
+
+                    return Results.Ok(new BaseResponse<string>
+                    {
+                        StatusCode = HttpStatusCode.OK,
+                        Message = "Delete tag successfully!",
+                    });
+                }
+                catch (Exception ex)
+                {
+                    return Results.BadRequest(new BaseResponse<string>
+                    {
+                        StatusCode = HttpStatusCode.BadRequest,
+                        Message = $"Failed to delete task: {ex.Message}",
+                    });
+                }
             }).WithName("DeleteTag").WithTags("Tags").WithOpenApi();
         }
     }

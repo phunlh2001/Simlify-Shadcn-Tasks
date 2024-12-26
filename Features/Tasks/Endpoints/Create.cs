@@ -13,8 +13,7 @@ namespace TaskManagement.Features.Tasks.Endpoints
         {
             app.MapPost("/tasks/create", async (CreateTaskRequest request, AppDbContext context) =>
             {
-                var validator = new CreateTaskValidator();
-                var validationResult = validator.Validate(request);
+                var validationResult = new CreateTaskValidator().Validate(request);
                 if (!validationResult.IsValid)
                 {
                     return Results.BadRequest(new BaseResponse<List<string>>

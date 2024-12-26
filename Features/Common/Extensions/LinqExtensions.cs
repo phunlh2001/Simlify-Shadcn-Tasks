@@ -11,6 +11,7 @@ namespace TaskManagement.Features.Common.Extensions
 
         public static IQueryable<T> OrderByDirection<T>(this IQueryable<T> query, Expression<Func<T, object>> orderSelector, string sortOrder)
         {
+            if (string.IsNullOrEmpty(sortOrder)) { sortOrder = "ASC"; }
             return sortOrder.ToUpper() == "ASC"
                 ? query.OrderBy(orderSelector)
                 : query.OrderByDescending(orderSelector);

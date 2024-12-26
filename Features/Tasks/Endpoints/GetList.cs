@@ -16,9 +16,18 @@ namespace TaskManagement.Features.Tasks.Endpoints
     {
         public static void MapGetTaskList(this WebApplication app)
         {
-            app.MapGet("/tasks", async ([AsParameters] GetTasksRequest @params, AppDbContext ctx, IMapper mapper) =>
+            app.MapPost("/tasks", async (GetTasksRequest request, AppDbContext ctx, IMapper mapper) =>
             {
-                var validationResults = new GetTaskValidator().Validate(@params);
+                if (request == null)
+                {
+                    return Results.BadRequest(new BaseResponse<string>
+                    {
+                        StatusCode = HttpStatusCode.BadRequest,
+                        Message = "Request body is required!"
+                    });
+                }
+
+                var validationResults = new GetTaskValidator().Validate(request);
                 if (!validationResults.IsValid)
                 {
                     return Results.BadRequest(new BaseResponse<List<string>>
@@ -29,10 +38,10 @@ namespace TaskManagement.Features.Tasks.Endpoints
                     });
                 }
 
-                var take = Math.Max(@params.Total, 5);
-                var page = Math.Max(@params.Page - 1, 0) * take;
+                var take = Math.Max(request.Total, 5);
+                var page = Math.Max(request.Page - 1, 0) * take;
 
-                Expression<Func<TaskEntity, object>> sortSelector = @params.SortBy.ToLower() switch
+                Expression<Func<TaskEntity, object>> sortSelector = request.SortBy.ToLower() switch
                 {
                     "title" => task => task.Title,
                     "status" => task => task.Status,
@@ -45,7 +54,7 @@ namespace TaskManagement.Features.Tasks.Endpoints
                                 .Include(t => t.Tags)
                                 .Skip(page)
                                 .Take(take)
-                                .OrderByDirection(sortSelector, @params.SortOrder)
+                                .OrderByDirection(sortSelector, request.SortOrder)
                                 .ToListAsync();
 
                 if (tasks.Count == 0)
