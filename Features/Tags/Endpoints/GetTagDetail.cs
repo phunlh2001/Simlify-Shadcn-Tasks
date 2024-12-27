@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using System.Net;
 using TaskManagement.Common.Models;
 using TaskManagement.Features.Tags.Models;
 using TaskManagement.Persistences;
@@ -16,15 +15,14 @@ namespace TaskManagement.Features.Tags.Endpoints
                 var tag = await context.Tags.FirstOrDefaultAsync(tag => tag.Id == id);
                 if (tag == null)
                 {
-                    return Results.NotFound(new BaseResponse<string>
+                    return Results.NotFound(new ResponseInfo<string>
                     {
-                        StatusCode = HttpStatusCode.NotFound,
                         Message = "Not found any tags"
                     });
                 }
 
                 return Results.Ok(mapper.Map<TagResponse>(tag));
-            }).WithName("GetTagById").WithTags("Tags").WithSummary("Get a tag by id").WithOpenApi();
+            }).WithName("GetTagById").WithTags("Tags").WithSummary("Get a tag by id").WithOpenApi().Produces<TagResponse>();
         }
     }
 }

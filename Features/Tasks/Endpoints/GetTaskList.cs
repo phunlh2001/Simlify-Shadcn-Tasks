@@ -2,7 +2,6 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using System.Net;
 using TaskManagement.Common.Extensions;
 using TaskManagement.Common.Models;
 using TaskManagement.Features.Tasks.Models;
@@ -19,9 +18,8 @@ namespace TaskManagement.Features.Tasks.Endpoints
             {
                 if (request == null)
                 {
-                    return Results.BadRequest(new BaseResponse<string>
+                    return Results.BadRequest(new ResponseInfo<string>
                     {
-                        StatusCode = HttpStatusCode.BadRequest,
                         Message = "Request body is required!"
                     });
                 }
@@ -29,9 +27,8 @@ namespace TaskManagement.Features.Tasks.Endpoints
                 var validationResults = await validator.ValidateAsync(request);
                 if (!validationResults.IsValid)
                 {
-                    return Results.BadRequest(new BaseResponse<List<string>>
+                    return Results.BadRequest(new ResponseInfo<List<string>>
                     {
-                        StatusCode = HttpStatusCode.BadRequest,
                         Message = "Invalid request!",
                         Info = validationResults.Errors.Select(error => error.ErrorMessage).ToList()
                     });
@@ -58,16 +55,19 @@ namespace TaskManagement.Features.Tasks.Endpoints
 
                 if (tasks.Count == 0)
                 {
-                    return Results.NotFound(new BaseResponse<string>
+                    return Results.NotFound(new ResponseInfo<string>
                     {
-                        StatusCode = HttpStatusCode.NotFound,
                         Message = "Empty list!"
                     });
                 }
 
                 return Results.Ok(mapper.Map<List<TaskResponse>>(tasks));
 
-            }).WithName("GetTaskList").WithTags("Tasks").WithSummary("Get task list").WithOpenApi();
+            }).WithName("GetTaskList")
+                .WithTags("Tasks")
+                .WithSummary("Get task list")
+                .WithOpenApi()
+                .Produces<List<TaskResponse>>();
         }
     }
 }

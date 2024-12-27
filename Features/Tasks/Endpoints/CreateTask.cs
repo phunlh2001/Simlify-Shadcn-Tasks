@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using System.Net;
 using TaskManagement.Common.Models;
 using TaskManagement.Features.Tasks.Models;
 using TaskManagement.Persistences;
@@ -15,9 +14,8 @@ namespace TaskManagement.Features.Tasks.Endpoints
             {
                 if (request == null)
                 {
-                    return Results.BadRequest(new BaseResponse<string>
+                    return Results.BadRequest(new ResponseInfo<string>
                     {
-                        StatusCode = HttpStatusCode.BadRequest,
                         Message = "Request body is required!"
                     });
                 }
@@ -25,9 +23,8 @@ namespace TaskManagement.Features.Tasks.Endpoints
                 var validationResult = await validator.ValidateAsync(request);
                 if (!validationResult.IsValid)
                 {
-                    return Results.BadRequest(new BaseResponse<List<string>>
+                    return Results.BadRequest(new ResponseInfo<List<string>>
                     {
-                        StatusCode = HttpStatusCode.BadRequest,
                         Message = "Validation failed!",
                         Info = validationResult.Errors.Select(error => error.ErrorMessage).ToList()
                     });
@@ -72,9 +69,8 @@ namespace TaskManagement.Features.Tasks.Endpoints
                 context.Tasks.Add(task);
                 await context.SaveChangesAsync();
 
-                return Results.Ok(new BaseResponse<string>
+                return Results.Ok(new ResponseInfo<string>
                 {
-                    StatusCode = HttpStatusCode.OK,
                     Message = "Create new task successfully!"
                 });
             }).WithName("CreateTask").WithTags("Tasks").WithSummary("Create a new task").WithOpenApi();

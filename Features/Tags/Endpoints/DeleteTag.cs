@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Net;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using TaskManagement.Common.Models;
+using TaskManagement.Features.Tags.Models;
 using TaskManagement.Persistences;
 
 namespace TaskManagement.Features.Tags.Endpoints
@@ -9,14 +10,13 @@ namespace TaskManagement.Features.Tags.Endpoints
     {
         public static void MapDeleteTag(this WebApplication app)
         {
-            app.MapDelete("/tags/{id}", async (Guid id, AppDbContext context) =>
+            app.MapDelete("/tags/{id}", async (Guid id, AppDbContext context, IMapper mapper) =>
             {
                 var tag = await context.Tags.FirstOrDefaultAsync(tag => tag.Id == id);
                 if (tag == null)
                 {
-                    return Results.NotFound(new BaseResponse<string>
+                    return Results.NotFound(new ResponseInfo<string>
                     {
-                        StatusCode = HttpStatusCode.NotFound,
                         Message = $"Not found tag with id: {id}"
                     });
                 }
@@ -26,21 +26,20 @@ namespace TaskManagement.Features.Tags.Endpoints
                     context.Tags.Remove(tag);
                     await context.SaveChangesAsync();
 
-                    return Results.Ok(new BaseResponse<string>
+                    return Results.Ok(new ResponseInfo<TagResponse>
                     {
-                        StatusCode = HttpStatusCode.OK,
                         Message = "Delete tag successfully!",
+                        Info = mapper.Map<TagResponse>(tag)
                     });
                 }
                 catch (Exception ex)
                 {
-                    return Results.BadRequest(new BaseResponse<string>
+                    return Results.BadRequest(new ResponseInfo<string>
                     {
-                        StatusCode = HttpStatusCode.BadRequest,
                         Message = $"Failed to delete: {ex.Message}",
                     });
                 }
-            }).WithName("DeleteTag").WithTags("Tags").WithSummary("Delete a tag by id").WithOpenApi();
+            }).WithName("DeleteTag").WithTags("Tags").WithSummary("Delete a tag by id").WithOpenApi().Produces<ResponseInfo<TagResponse>>();
         }
     }
 }

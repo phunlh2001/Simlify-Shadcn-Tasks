@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using System.Net;
 using TaskManagement.Common.Models;
 using TaskManagement.Features.Tasks.Models;
 using TaskManagement.Persistences;
@@ -17,9 +16,8 @@ namespace TaskManagement.Features.Tasks.Endpoints
             {
                 if (request == null)
                 {
-                    return Results.BadRequest(new BaseResponse<string>
+                    return Results.BadRequest(new ResponseInfo<string>
                     {
-                        StatusCode = HttpStatusCode.BadRequest,
                         Message = "Request body is required!"
                     });
                 }
@@ -27,9 +25,8 @@ namespace TaskManagement.Features.Tasks.Endpoints
                 var validatorResult = await validator.ValidateAsync(request);
                 if (!validatorResult.IsValid)
                 {
-                    return Results.BadRequest(new BaseResponse<List<string>>
+                    return Results.BadRequest(new ResponseInfo<List<string>>
                     {
-                        StatusCode = HttpStatusCode.BadRequest,
                         Message = "Validation failed!",
                         Info = validatorResult.Errors.Select(error => error.ErrorMessage).ToList()
                     });
@@ -38,9 +35,8 @@ namespace TaskManagement.Features.Tasks.Endpoints
                 var taskExisted = await context.Tasks.Include(t => t.Tags).FirstOrDefaultAsync(t => t.Id == id);
                 if (taskExisted == null)
                 {
-                    return Results.NotFound(new BaseResponse<string>
+                    return Results.NotFound(new ResponseInfo<string>
                     {
-                        StatusCode = HttpStatusCode.NotFound,
                         Message = $"Not found any task has id: {id}"
                     });
                 }
@@ -72,21 +68,20 @@ namespace TaskManagement.Features.Tasks.Endpoints
                     context.Tasks.Update(taskModified);
                     await context.SaveChangesAsync();
 
-                    return Results.Ok(new BaseResponse<string>
+                    return Results.Ok(new ResponseInfo<UpdateTaskRequest>
                     {
-                        StatusCode = HttpStatusCode.OK,
-                        Message = "Update task succesfully"
+                        Message = "Update task succesfully",
+                        Info = request
                     });
                 }
                 catch (Exception e)
                 {
-                    return Results.BadRequest(new BaseResponse<string>
+                    return Results.BadRequest(new ResponseInfo<string>
                     {
-                        StatusCode = HttpStatusCode.BadRequest,
                         Message = $"Failed to update task: {e.Message}"
                     });
                 }
-            }).WithName("UpdateTask").WithTags("Tasks").WithSummary("Update task by id").WithOpenApi();
+            }).WithName("UpdateTask").WithTags("Tasks").WithSummary("Update task by id").WithOpenApi().Produces<ResponseInfo<UpdateTaskRequest>>();
         }
     }
 }

@@ -34,6 +34,8 @@ builder.Services.AddScoped<IValidator<UpdateTaskRequest>, UpdateTaskValidator>()
 builder.Services.AddScoped<IValidator<GetTasksRequest>, GetTaskValidator>();
 builder.Services.AddScoped<IValidator<GetTagsRequest>, GetTagsValidator>();
 
+builder.Services.AddProblemDetails();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -48,7 +50,7 @@ app.UseHttpsRedirection();
 // Task endpoints
 app.MapGetTaskList();
 app.MapGetTaskDetail();
-app.MapFilterTasks();
+app.MapSearchTask();
 app.MapCreateTask();
 app.MapUpdateTask();
 app.MapDeleteTask();

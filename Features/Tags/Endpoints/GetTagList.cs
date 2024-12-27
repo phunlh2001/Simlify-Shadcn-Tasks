@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using System.Net;
 using TaskManagement.Common.Models;
 using TaskManagement.Features.Tags.Models;
 using TaskManagement.Persistences;
@@ -16,9 +15,8 @@ namespace TaskManagement.Features.Tags.Endpoints
             {
                 if (request == null)
                 {
-                    return Results.BadRequest(new BaseResponse<string>
+                    return Results.BadRequest(new ResponseInfo<string>
                     {
-                        StatusCode = HttpStatusCode.BadRequest,
                         Message = "Request body is required!",
                     });
                 }
@@ -26,9 +24,8 @@ namespace TaskManagement.Features.Tags.Endpoints
                 var validatorResult = await validator.ValidateAsync(request);
                 if (!validatorResult.IsValid)
                 {
-                    return Results.BadRequest(new BaseResponse<List<string>>
+                    return Results.BadRequest(new ResponseInfo<List<string>>
                     {
-                        StatusCode = HttpStatusCode.BadRequest,
                         Message = "Invalid values!",
                         Info = validatorResult.Errors.Select(x => x.ErrorMessage).ToList()
                     });
@@ -45,19 +42,18 @@ namespace TaskManagement.Features.Tags.Endpoints
 
                 if (tags.Count == 0)
                 {
-                    return Results.NotFound(new BaseResponse<string>
+                    return Results.NotFound(new ResponseInfo<string>
                     {
-                        StatusCode = HttpStatusCode.NotFound,
                         Message = "Empty list!"
                     });
                 }
                 return Results.Ok(mapper.Map<List<TagResponse>>(tags));
 
-            })
-                .WithName("GetTagList")
+            }).WithName("GetTagList")
                 .WithTags("Tags")
                 .WithSummary("Get tag list")
-                .WithOpenApi();
+                .WithOpenApi()
+                .Produces<List<TagResponse>>();
         }
     }
 }
