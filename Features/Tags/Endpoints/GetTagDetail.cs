@@ -24,7 +24,7 @@ namespace TaskManagement.Features.Tags.Endpoints
                 }
 
                 return Results.Ok(mapper.Map<TagResponse>(tag));
-            }).WithName("GetTagById").WithTags("Tags").WithOpenApi();
+            }).WithName("GetTagById").WithTags("Tags").WithSummary("Get a tag by id").WithOpenApi();
         }
     }
 }

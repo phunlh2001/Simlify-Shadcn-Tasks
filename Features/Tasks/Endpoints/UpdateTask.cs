@@ -86,7 +86,7 @@ namespace TaskManagement.Features.Tasks.Endpoints
                         Message = $"Failed to update task: {e.Message}"
                     });
                 }
-            }).WithName("UpdateTask").WithTags("Tasks").WithOpenApi();
+            }).WithName("UpdateTask").WithTags("Tasks").WithSummary("Update task by id").WithOpenApi();
         }
     }
 }

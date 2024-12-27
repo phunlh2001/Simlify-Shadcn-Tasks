@@ -23,7 +23,7 @@ namespace TaskManagement.Features.Tasks.Endpoints
                     });
                 }
                 return Results.Ok(mapper.Map<TaskResponse>(task));
-            }).WithName("GetById").WithTags("Tasks").WithOpenApi();
+            }).WithName("GetById").WithTags("Tasks").WithSummary("Get a task by id").WithOpenApi();
         }
     }
 }

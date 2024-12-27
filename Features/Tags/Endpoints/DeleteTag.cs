@@ -14,9 +14,9 @@ namespace TaskManagement.Features.Tags.Endpoints
                 var tag = await context.Tags.FirstOrDefaultAsync(tag => tag.Id == id);
                 if (tag == null)
                 {
-                    return Results.BadRequest(new BaseResponse<string>
+                    return Results.NotFound(new BaseResponse<string>
                     {
-                        StatusCode = HttpStatusCode.BadRequest,
+                        StatusCode = HttpStatusCode.NotFound,
                         Message = $"Not found tag with id: {id}"
                     });
                 }
@@ -40,7 +40,7 @@ namespace TaskManagement.Features.Tags.Endpoints
                         Message = $"Failed to delete: {ex.Message}",
                     });
                 }
-            }).WithName("DeleteTag").WithTags("Tags").WithOpenApi();
+            }).WithName("DeleteTag").WithTags("Tags").WithSummary("Delete a tag by id").WithOpenApi();
         }
     }
 }

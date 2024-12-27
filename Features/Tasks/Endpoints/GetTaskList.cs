@@ -68,7 +68,7 @@ namespace TaskManagement.Features.Tasks.Endpoints
 
                 return Results.Ok(mapper.Map<List<TaskResponse>>(tasks));
 
-            }).WithName("GetTaskList").WithTags("Tasks").WithOpenApi();
+            }).WithName("GetTaskList").WithTags("Tasks").WithSummary("Get task list").WithOpenApi();
         }
     }
 }

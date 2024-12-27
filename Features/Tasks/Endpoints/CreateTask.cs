@@ -77,7 +77,7 @@ namespace TaskManagement.Features.Tasks.Endpoints
                     StatusCode = HttpStatusCode.OK,
                     Message = "Create new task successfully!"
                 });
-            }).WithName("CreateTask").WithTags("Tasks").WithOpenApi();
+            }).WithName("CreateTask").WithTags("Tasks").WithSummary("Create a new task").WithOpenApi();
         }
     }
 }

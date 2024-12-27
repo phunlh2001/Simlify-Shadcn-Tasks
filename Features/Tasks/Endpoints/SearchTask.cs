@@ -29,7 +29,7 @@ namespace TaskManagement.Features.Tasks.Endpoints
                 }
 
                 return Results.Ok(mapper.Map<List<TaskResponse>>(tasks));
-            }).WithName("SearchTask").WithTags("Tasks").WithOpenApi();
+            }).WithName("SearchTask").WithTags("Tasks").WithSummary("Search many tasks by title").WithOpenApi();
         }
     }
 }

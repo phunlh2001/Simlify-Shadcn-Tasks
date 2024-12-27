@@ -54,7 +54,11 @@ namespace TaskManagement.Features.Tags.Endpoints
                 }
                 return Results.Ok(mapper.Map<List<TagResponse>>(tags));
 
-            }).WithName("GetTagList").WithTags("Tags").WithOpenApi();
+            })
+                .WithName("GetTagList")
+                .WithTags("Tags")
+                .WithSummary("Get tag list")
+                .WithOpenApi();
         }
     }
 }

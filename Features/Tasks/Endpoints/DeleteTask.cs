@@ -40,7 +40,7 @@ namespace TaskManagement.Features.Tasks.Endpoints
                         Message = $"Failed to delete: {e.Message}",
                     });
                 }
-            }).WithName("DeleteTask").WithTags("Tasks").WithOpenApi();
+            }).WithName("DeleteTask").WithTags("Tasks").WithSummary("Delete task by id").WithOpenApi();
         }
     }
 }
