@@ -22,7 +22,6 @@ namespace TaskManagement.Features.Tasks.Endpoints
                         Message = "Not found any task"
                     });
                 }
-
                 return Results.Ok(mapper.Map<TaskResponse>(task));
             }).WithName("GetById").WithTags("Tasks").WithOpenApi();
         }

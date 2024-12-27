@@ -37,7 +37,7 @@ namespace TaskManagement.Features.Tasks.Endpoints
                     return Results.BadRequest(new BaseResponse<string>
                     {
                         StatusCode = HttpStatusCode.BadRequest,
-                        Message = e.Message,
+                        Message = $"Failed to delete: {e.Message}",
                     });
                 }
             }).WithName("DeleteTask").WithTags("Tasks").WithOpenApi();
