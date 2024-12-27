@@ -52,7 +52,6 @@ namespace TaskManagement.Features.Tasks.Endpoints
                     }
 
                     tags.Add(tagEntity);
-                    await context.SaveChangesAsync();
                 }
 
                 var newId = Guid.NewGuid();
