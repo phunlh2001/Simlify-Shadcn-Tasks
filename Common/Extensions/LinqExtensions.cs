@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace TaskManagement.Features.Common.Extensions
+namespace TaskManagement.Common.Extensions
 {
     public static class LinqExtensions
     {

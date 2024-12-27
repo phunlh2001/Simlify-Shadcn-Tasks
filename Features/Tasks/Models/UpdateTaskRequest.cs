@@ -1,15 +1,14 @@
-﻿using TaskManagement.Features.Common.Models;
+﻿using TaskManagement.Common.Models;
 using TaskManagement.Persistences.Enums;
 
-namespace TaskManagement.Features.Tasks.Responses
+namespace TaskManagement.Features.Tasks.Models
 {
-    public class TaskResponse
+    public class UpdateTaskRequest
     {
-        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Title { get; set; }
         public TaskEntityStatus Status { get; set; }
         public TaskPriority Priority { get; set; }
-        public List<TagPreload> Tags { get; set; }
+        public List<TagPreload> Tags { get; set; } = [];
     }
 }

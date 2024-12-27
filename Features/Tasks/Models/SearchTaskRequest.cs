@@ -1,4 +1,4 @@
-﻿namespace TaskManagement.Features.Tasks.Requests
+﻿namespace TaskManagement.Features.Tasks.Models
 {
     public class SearchTaskRequest
     {

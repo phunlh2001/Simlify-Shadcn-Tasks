@@ -1,7 +1,12 @@
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 using TaskManagement.Features.Tags.Endpoints;
+using TaskManagement.Features.Tags.Models;
+using TaskManagement.Features.Tags.Validations;
 using TaskManagement.Features.Tasks.Endpoints;
+using TaskManagement.Features.Tasks.Models;
+using TaskManagement.Features.Tasks.Validations;
 using TaskManagement.Persistences;
 using TaskManagement.Persistences.Extensions;
 
@@ -23,6 +28,11 @@ builder.Services.ConfigureHttpJsonOptions(option =>
 });
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.AddScoped<IValidator<CreateTaskRequest>, CreateTaskValidator>();
+builder.Services.AddScoped<IValidator<UpdateTaskRequest>, UpdateTaskValidator>();
+builder.Services.AddScoped<IValidator<GetTasksRequest>, GetTaskValidator>();
+builder.Services.AddScoped<IValidator<GetTagsRequest>, GetTagsValidator>();
 
 var app = builder.Build();
 

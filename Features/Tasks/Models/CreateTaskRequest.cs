@@ -1,9 +1,9 @@
-﻿using TaskManagement.Features.Common.Models;
+﻿using TaskManagement.Common.Models;
 using TaskManagement.Persistences.Enums;
 
-namespace TaskManagement.Features.Tasks.Requests
+namespace TaskManagement.Features.Tasks.Models
 {
-    public class UpdateTaskRequest
+    public class CreateTaskRequest
     {
         public string Name { get; set; }
         public string Title { get; set; }

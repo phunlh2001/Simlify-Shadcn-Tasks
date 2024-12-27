@@ -1,4 +1,4 @@
-﻿namespace TaskManagement.Features.Common.Interfaces
+﻿namespace TaskManagement.Common.Interfaces
 {
     public interface IPaginationRequest
     {

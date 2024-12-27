@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using TaskManagement.Features.Common.Models;
-using TaskManagement.Features.Tags.Responses;
+using TaskManagement.Common.Models;
+using TaskManagement.Features.Tags.Models;
 using TaskManagement.Persistences.Entities;
 
-namespace TaskManagement.MapperConfig
+namespace TaskManagement.Features.Tags.Mapper
 {
     public class TagMapper : Profile
     {

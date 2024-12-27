@@ -1,6 +1,6 @@
-﻿using TaskManagement.Features.Common.Interfaces;
+﻿using TaskManagement.Common.Interfaces;
 
-namespace TaskManagement.Features.Tags.Requests
+namespace TaskManagement.Features.Tags.Models
 {
     public class GetTagsRequest : IPaginationRequest
     {

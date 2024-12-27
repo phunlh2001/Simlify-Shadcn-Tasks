@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Net;
-using TaskManagement.Features.Common.Models;
+using TaskManagement.Common.Models;
 using TaskManagement.Persistences;
 
 namespace TaskManagement.Features.Tasks.Endpoints

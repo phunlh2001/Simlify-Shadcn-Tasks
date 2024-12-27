@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace TaskManagement.Features.Common.Models
+namespace TaskManagement.Common.Models
 {
     public class BaseResponse<T> where T : class
     {

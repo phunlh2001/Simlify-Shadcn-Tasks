@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
-using TaskManagement.Features.Common.Models;
-using TaskManagement.Features.Tasks.Responses;
+using TaskManagement.Common.Models;
+using TaskManagement.Features.Tasks.Models;
 using TaskManagement.Persistences;
 
 namespace TaskManagement.Features.Tasks.Endpoints

@@ -1,6 +1,6 @@
-﻿using TaskManagement.Features.Common.Interfaces;
+﻿using TaskManagement.Common.Interfaces;
 
-namespace TaskManagement.Features.Tasks.Requests
+namespace TaskManagement.Features.Tasks.Models
 {
     public class GetTasksRequest : IPaginationRequest
     {

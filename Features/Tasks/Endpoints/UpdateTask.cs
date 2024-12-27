@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
-using TaskManagement.Features.Common.Models;
-using TaskManagement.Features.Tasks.Requests;
-using TaskManagement.Features.Tasks.Validations;
+using TaskManagement.Common.Models;
+using TaskManagement.Features.Tasks.Models;
 using TaskManagement.Persistences;
 using TaskManagement.Persistences.Entities;
 
@@ -13,7 +13,7 @@ namespace TaskManagement.Features.Tasks.Endpoints
     {
         public static void MapUpdateTask(this WebApplication app)
         {
-            app.MapPut("/tasks/{id}", async (Guid id, UpdateTaskRequest request, AppDbContext context, IMapper mapper) =>
+            app.MapPut("/tasks/{id}", async (Guid id, UpdateTaskRequest request, AppDbContext context, IMapper mapper, IValidator<UpdateTaskRequest> validator) =>
             {
                 if (request == null)
                 {
@@ -24,7 +24,7 @@ namespace TaskManagement.Features.Tasks.Endpoints
                     });
                 }
 
-                var validatorResult = new UpdateTaskValidator().Validate(request);
+                var validatorResult = await validator.ValidateAsync(request);
                 if (!validatorResult.IsValid)
                 {
                     return Results.BadRequest(new BaseResponse<List<string>>

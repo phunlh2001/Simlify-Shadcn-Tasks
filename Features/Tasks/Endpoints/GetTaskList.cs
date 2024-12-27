@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using System.Net;
-using TaskManagement.Features.Common.Extensions;
-using TaskManagement.Features.Common.Models;
-using TaskManagement.Features.Tasks.Requests;
-using TaskManagement.Features.Tasks.Responses;
-using TaskManagement.Features.Tasks.Validations;
+using TaskManagement.Common.Extensions;
+using TaskManagement.Common.Models;
+using TaskManagement.Features.Tasks.Models;
 using TaskManagement.Persistences;
 using TaskManagement.Persistences.Entities;
 
@@ -16,7 +15,7 @@ namespace TaskManagement.Features.Tasks.Endpoints
     {
         public static void MapGetTaskList(this WebApplication app)
         {
-            app.MapPost("/tasks", async (GetTasksRequest request, AppDbContext ctx, IMapper mapper) =>
+            app.MapPost("/tasks", async (GetTasksRequest request, AppDbContext ctx, IMapper mapper, IValidator<GetTasksRequest> validator) =>
             {
                 if (request == null)
                 {
@@ -27,7 +26,7 @@ namespace TaskManagement.Features.Tasks.Endpoints
                     });
                 }
 
-                var validationResults = new GetTaskValidator().Validate(request);
+                var validationResults = await validator.ValidateAsync(request);
                 if (!validationResults.IsValid)
                 {
                     return Results.BadRequest(new BaseResponse<List<string>>

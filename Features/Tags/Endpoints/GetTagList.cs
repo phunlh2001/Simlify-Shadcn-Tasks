@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
-using TaskManagement.Features.Common.Models;
-using TaskManagement.Features.Tags.Requests;
-using TaskManagement.Features.Tags.Responses;
-using TaskManagement.Features.Tags.Validations;
+using TaskManagement.Common.Models;
+using TaskManagement.Features.Tags.Models;
 using TaskManagement.Persistences;
 
 namespace TaskManagement.Features.Tags.Endpoints
@@ -13,7 +12,7 @@ namespace TaskManagement.Features.Tags.Endpoints
     {
         public static void MapGetTagList(this WebApplication app)
         {
-            app.MapPost("/tags", async (GetTagsRequest request, AppDbContext context, IMapper mapper) =>
+            app.MapPost("/tags", async (GetTagsRequest request, AppDbContext context, IMapper mapper, IValidator<GetTagsRequest> validator) =>
             {
                 if (request == null)
                 {
@@ -24,7 +23,7 @@ namespace TaskManagement.Features.Tags.Endpoints
                     });
                 }
 
-                var validatorResult = new GetTagsValidator().Validate(request);
+                var validatorResult = await validator.ValidateAsync(request);
                 if (!validatorResult.IsValid)
                 {
                     return Results.BadRequest(new BaseResponse<List<string>>

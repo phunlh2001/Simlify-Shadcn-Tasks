@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using TaskManagement.Features.Tasks.Requests;
+using TaskManagement.Features.Tasks.Models;
 
 namespace TaskManagement.Features.Tasks.Validations
 {

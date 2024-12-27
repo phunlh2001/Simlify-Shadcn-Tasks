@@ -1,7 +1,7 @@
-﻿using System.Net;
-using TaskManagement.Features.Common.Models;
-using TaskManagement.Features.Tasks.Requests;
-using TaskManagement.Features.Tasks.Validations;
+﻿using FluentValidation;
+using System.Net;
+using TaskManagement.Common.Models;
+using TaskManagement.Features.Tasks.Models;
 using TaskManagement.Persistences;
 using TaskManagement.Persistences.Entities;
 
@@ -11,7 +11,7 @@ namespace TaskManagement.Features.Tasks.Endpoints
     {
         public static void MapCreateTask(this WebApplication app)
         {
-            app.MapPost("/tasks/create", async (CreateTaskRequest request, AppDbContext context) =>
+            app.MapPost("/tasks/create", async (CreateTaskRequest request, AppDbContext context, IValidator<CreateTaskRequest> validator) =>
             {
                 if (request == null)
                 {
@@ -22,7 +22,7 @@ namespace TaskManagement.Features.Tasks.Endpoints
                     });
                 }
 
-                var validationResult = new CreateTaskValidator().Validate(request);
+                var validationResult = await validator.ValidateAsync(request);
                 if (!validationResult.IsValid)
                 {
                     return Results.BadRequest(new BaseResponse<List<string>>

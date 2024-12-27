@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
-using TaskManagement.Features.Tasks.Requests;
-using TaskManagement.Features.Tasks.Responses;
+using TaskManagement.Features.Tasks.Models;
 using TaskManagement.Persistences.Entities;
 
-namespace TaskManagement.MapperConfig
+namespace TaskManagement.Features.Tasks.Mapper
 {
     public class TaskMapper : Profile
     {
