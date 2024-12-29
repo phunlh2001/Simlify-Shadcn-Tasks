@@ -1,6 +1,8 @@
-using FluentValidation;
-using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
+using FluentValidation;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.EntityFrameworkCore;
+using TaskManagement.Features.Files.Endpoints;
 using TaskManagement.Features.Tags.Endpoints;
 using TaskManagement.Features.Tags.Models;
 using TaskManagement.Features.Tags.Validations;
@@ -36,6 +38,11 @@ builder.Services.AddScoped<IValidator<GetTagsRequest>, GetTagsValidator>();
 
 builder.Services.AddProblemDetails();
 
+builder.Services.AddAuthentication();
+builder.Services.AddAuthorization();
+
+builder.Services.AddAntiforgery();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -46,6 +53,28 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseAntiforgery();
+
+app.UseExceptionHandler(appError =>
+{
+    appError.Run(async context =>
+    {
+        context.Response.StatusCode = 500;
+        context.Response.ContentType = "application/json";
+
+        var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
+        if (contextFeature is not null)
+        {
+            await context.Response.WriteAsJsonAsync(new
+            {
+                context.Response.StatusCode,
+                contextFeature.Error.Message,
+            });
+        }
+    });
+});
 
 // Task endpoints
 app.MapGetTaskList();
@@ -59,6 +88,9 @@ app.MapDeleteTask();
 app.MapGetTagList();
 app.MapGetTagDetail();
 app.MapDeleteTag();
+
+// Upload file
+app.MapUploadFile();
 
 await app.Init();
 app.Run();

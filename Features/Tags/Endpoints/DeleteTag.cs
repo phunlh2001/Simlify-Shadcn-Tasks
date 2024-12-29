@@ -34,10 +34,8 @@ namespace TaskManagement.Features.Tags.Endpoints
                 }
                 catch (Exception ex)
                 {
-                    return Results.BadRequest(new ResponseInfo<string>
-                    {
-                        Message = $"Failed to delete: {ex.Message}",
-                    });
+                    Console.WriteLine(ex.Message);
+                    throw new Exception("Failed to delete tag!");
                 }
             }).WithName("DeleteTag").WithTags("Tags").WithSummary("Delete a tag by id").WithOpenApi().Produces<ResponseInfo<TagResponse>>();
         }

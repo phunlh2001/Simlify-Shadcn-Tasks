@@ -34,10 +34,8 @@ namespace TaskManagement.Features.Tasks.Endpoints
                 }
                 catch (Exception e)
                 {
-                    return Results.BadRequest(new ResponseInfo<string>
-                    {
-                        Message = $"Failed to delete: {e.Message}",
-                    });
+                    Console.WriteLine(e.Message);
+                    throw new Exception("Failed to delete task!");
                 }
             }).WithName("DeleteTask").WithTags("Tasks").WithSummary("Delete task by id").WithOpenApi().Produces<ResponseInfo<TaskResponse>>();
         }

@@ -69,11 +69,12 @@ namespace TaskManagement.Features.Tasks.Endpoints
                 context.Tasks.Add(task);
                 await context.SaveChangesAsync();
 
-                return Results.Ok(new ResponseInfo<string>
+                return Results.Ok(new ResponseInfo<CreateTaskRequest>
                 {
-                    Message = "Create new task successfully!"
+                    Message = "Create new task successfully!",
+                    Info = request
                 });
-            }).WithName("CreateTask").WithTags("Tasks").WithSummary("Create a new task").WithOpenApi();
+            }).WithName("CreateTask").WithTags("Tasks").WithSummary("Create a new task").WithOpenApi().Produces<ResponseInfo<CreateTaskRequest>>();
         }
     }
 }

@@ -48,6 +48,7 @@ namespace TaskManagement.Features.Tasks.Endpoints
                     {
                         var tagEntity = new Tag
                         {
+                            Id = tag.Id ?? Guid.NewGuid(),
                             Name = tag.Name,
                         };
 
@@ -57,7 +58,6 @@ namespace TaskManagement.Features.Tasks.Endpoints
                         }
                         else
                         {
-                            tagEntity.Id = tag.Id.Value;
                             context.Tags.Update(tagEntity);
                         }
                         tags.Add(tagEntity);
@@ -76,10 +76,8 @@ namespace TaskManagement.Features.Tasks.Endpoints
                 }
                 catch (Exception e)
                 {
-                    return Results.BadRequest(new ResponseInfo<string>
-                    {
-                        Message = $"Failed to update task: {e.Message}"
-                    });
+                    Console.WriteLine(e.Message);
+                    throw new Exception("Failed to update task!");
                 }
             }).WithName("UpdateTask").WithTags("Tasks").WithSummary("Update task by id").WithOpenApi().Produces<ResponseInfo<UpdateTaskRequest>>();
         }

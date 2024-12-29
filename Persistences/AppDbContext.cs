@@ -10,8 +10,8 @@ namespace TaskManagement.Persistences
             base.OnModelCreating(builder);
             builder.Entity<TaskEntity>(b =>
             {
-                b.Property(x => x.Title).IsRequired();
-                b.Property(x => x.Name).IsRequired();
+                b.Property(x => x.Title).HasMaxLength(1000).IsRequired();
+                b.Property(x => x.Name).HasMaxLength(100).IsRequired();
                 b.Property(x => x.Status).HasMaxLength(30).HasConversion<string>();
                 b.Property(x => x.Priority).HasMaxLength(30).HasConversion<string>();
 
