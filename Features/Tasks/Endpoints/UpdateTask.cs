@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using TaskManagement.Common.Models;
+using TaskManagement.Core.Models;
 using TaskManagement.Features.Tasks.Models;
 using TaskManagement.Persistences;
 using TaskManagement.Persistences.Entities;
@@ -46,21 +46,26 @@ namespace TaskManagement.Features.Tasks.Endpoints
                     List<Tag> tags = [];
                     foreach (var tag in request.Tags)
                     {
-                        var tagEntity = new Tag
-                        {
-                            Id = tag.Id ?? Guid.NewGuid(),
-                            Name = tag.Name,
-                        };
-
                         if (!tag.Id.HasValue)
                         {
+                            var tagEntity = new Tag
+                            {
+                                Id = Guid.NewGuid(),
+                                Name = tag.Name,
+                            };
                             context.Tags.Add(tagEntity);
+                            tags.Add(tagEntity);
                         }
                         else
                         {
-                            context.Tags.Update(tagEntity);
+                            var tagExist = await context.Tags.FirstOrDefaultAsync(t => t.Id == tag.Id.Value);
+                            if (tagExist != null)
+                            {
+                                tagExist.Name = tag.Name;
+                                context.Tags.Update(tagExist);
+                                tags.Add(tagExist);
+                            }
                         }
-                        tags.Add(tagEntity);
                     }
 
                     taskExisted.TaskTags = tags.Select(t => new TaskTag { TaskId = id, TagId = t.Id }).ToList();

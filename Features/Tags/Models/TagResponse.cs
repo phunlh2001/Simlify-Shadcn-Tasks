@@ -1,4 +1,4 @@
-﻿using TaskManagement.Common.Models;
+﻿using TaskManagement.Core.Models;
 
 namespace TaskManagement.Features.Tags.Models
 {

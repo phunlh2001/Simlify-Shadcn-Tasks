@@ -1,4 +1,4 @@
-﻿namespace TaskManagement.Common.Models
+﻿namespace TaskManagement.Core.Models
 {
     public class TagPreload
     {

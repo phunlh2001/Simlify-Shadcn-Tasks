@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using TaskManagement.Common.Models;
+using TaskManagement.Core.Models;
 using TaskManagement.Features.Tags.Models;
 using TaskManagement.Persistences.Entities;
 

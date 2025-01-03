@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using TaskManagement.Common.Models;
+using TaskManagement.Core.Models;
 using TaskManagement.Features.Tasks.Models;
 using TaskManagement.Persistences;
 

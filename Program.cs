@@ -3,6 +3,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using TaskManagement.Features.Files.Endpoints;
+using TaskManagement.Features.Files.Filters;
 using TaskManagement.Features.Tags.Endpoints;
 using TaskManagement.Features.Tags.Models;
 using TaskManagement.Features.Tags.Validations;
@@ -17,7 +18,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.OperationFilter<FileUploadOperationFilter>();
+});
 builder.Services.AddDbContext<AppDbContext>(option =>
 {
     var connection = builder.Configuration.GetConnectionString("DbConnect");
@@ -53,6 +57,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
+
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseAntiforgery();

@@ -1,4 +1,4 @@
-﻿using TaskManagement.Common.Interfaces;
+﻿using TaskManagement.Core.Interfaces;
 
 namespace TaskManagement.Features.Tags.Models
 {

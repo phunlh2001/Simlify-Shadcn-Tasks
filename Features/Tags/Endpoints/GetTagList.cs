@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using TaskManagement.Common.Models;
+using TaskManagement.Core.Models;
 using TaskManagement.Features.Tags.Models;
 using TaskManagement.Persistences;
 

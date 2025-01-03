@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using TaskManagement.Common.Models;
+using TaskManagement.Core.Models;
 using TaskManagement.Features.Tasks.Models;
 using TaskManagement.Persistences;
 using TaskManagement.Persistences.Entities;

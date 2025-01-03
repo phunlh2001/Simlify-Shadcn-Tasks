@@ -1,9 +1,9 @@
-﻿using AutoMapper;
+﻿using System.Linq.Expressions;
+using AutoMapper;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
-using TaskManagement.Common.Extensions;
-using TaskManagement.Common.Models;
+using TaskManagement.Core.Extensions;
+using TaskManagement.Core.Models;
 using TaskManagement.Features.Tasks.Models;
 using TaskManagement.Persistences;
 using TaskManagement.Persistences.Entities;
